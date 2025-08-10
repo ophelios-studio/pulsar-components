@@ -1,0 +1,27 @@
+{*
+    ATTRIBUTES:
+    . theme="primary"
+    . dismissible=false (allow closure if true)
+*}
+{define "zf-alert", string $content, array $attributes = []}
+    {var string $theme = $attributes['theme'] ?? 'primary'}
+    {var bool $dismissible = $attributes['dismissible'] ?? false}
+
+    {var string $class = "alert alert-" . $theme}
+    {if $dismissible}
+        {do $class .= " alert-dismissible fade show"}
+    {/if}
+
+    {* Any custom attributes *}
+    {var array $supportedAttributes = ['theme', 'dismissible']}
+    {var array $customAttributes = []}
+    {foreach $attributes as $attributeName => $attributeValue}
+        {if !in_array($attributeName, $supportedAttributes)}
+            {do $customAttributes[$attributeName] = $attributeValue}
+        {/if}
+    {/foreach}
+    <div role="alert" class="{$class}" n:attr="$customAttributes">
+        <span>{$content|noescape}</span>
+        <button n:if="$dismissible" type="button" data-bs-dismiss="alert" aria-label="Close" class="btn-close"></button>
+    </div>
+{/define}
