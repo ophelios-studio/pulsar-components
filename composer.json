@@ -1,0 +1,21 @@
+{
+    "name": "ophelios/pulsar-components",
+    "description": "Framework extension which provides Latte components for various applications.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Pulsar\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "David Tucker",
+            "email": "david.tucker@ophelios.com"
+        }
+    ],
+    "require": {
+        "ophelios/zephyrus": "dev-main"
+    },
+    "minimum-stability": "dev"
+}
