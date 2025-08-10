@@ -1,0 +1,97 @@
+{*
+    ATTRIBUTES:
+    . shape="rounded" (square|circle|rounded)
+    . size="md" (xxs, xs, sm, md, lg, xl)
+    . placeholder=null (text or emoji)
+    . icon=null (full icon name or bi compatible)
+    . image=null (regular image path for avatar)
+    . theme=null (blue|azure|indigo|purple|pink|red|orange|yellow|lime|green|teal|cyan|gray-%|facebook|twitter)
+    . theme-light=false (n/a for gray-% and brands)
+    . status=null (same as theme)
+
+*}
+{define "zf-avatar", array $attributes = []}
+    {var string $shape = $attributes['shape'] ?? "rounded"}
+    {var string $size = $attributes['size'] ?? "md"}
+    {var bool $themeLight = $attributes['theme-light'] ?? false}
+    {var ?string $status = $attributes['status'] ?? null}
+    {var ?string $theme = $attributes['theme'] ?? null}
+    {var ?string $brand = $attributes['brand'] ?? null}
+    {var ?string $placeholder = $attributes['placeholder'] ?? null}
+    {var ?string $image = $attributes['image'] ?? null}
+    {var ?string $icon = $attributes['icon'] ?? null}
+
+    {* Generate classes *}
+    {var string $class = "avatar"}
+    {var string $style = ""}
+
+    {if $size != "md"}
+        {do $class .= " avatar-" . $size}
+    {/if}
+    {if $shape != "rounded"}
+        {if $shape == "circle"}
+            {do $class .= " rounded-circle"}
+        {/if}
+        {if $shape == "square"}
+            {do $class .= " rounded-0"}
+        {/if}
+    {/if}
+    {if $theme}
+        {if in_array($theme, ['blue', 'azure', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'lime', 'green', 'teal', 'cyan'])}
+            {do $class .= " bg-" . $theme . (($themeLight) ? "-lt" : "")}
+        {else}
+            {do $class .= " bg-" . $theme . " text-" . $theme . "-fg"}
+        {/if}
+    {/if}
+    {if }
+        {do $style = "background-image: url('" . $image . "');"}
+    {/if}
+    <span class="{$class}" style="{$style|noescape}">
+        {if $icon}
+            {var $iconClass = str_contains($icon, ' ') ? $icon : "bi bi-" . $icon}
+            <i class="icon avatar-icon {$iconClass}"></i>
+        {elseif $placeholder}
+            {$placeholder|noescape}
+        {/if}
+        {if $status}
+            <span class="badge bg-{$status}"></span>
+        {/if}
+    </span>
+{/define}
+
+{define "zf-avatar-image", string $publicPath, array $attributes = []}
+    {do $attributes['image'] = $publicPath}
+    {include "zf-avatar", $attributes}
+{/define}
+
+{define "zf-avatar-icon", string $icon, array $attributes = []}
+    {do $attributes['icon'] = $icon}
+    {include "zf-avatar", $attributes}
+{/define}
+
+{define "zf-avatar-placeholder", string $placeholder, array $attributes = []}
+    {do $attributes['placeholder'] = $placeholder}
+    {include "zf-avatar", $attributes}
+{/define}
+
+{*
+    The provider $entity object must contain `avatar` and `initials` properties. This mixin checks if the image is
+    available and if not reverse to a placeholder based on the initials.
+
+    ATTRIBUTES:
+    . src-prefix="/assets/images/avatars/" (applies a prefix for the $entity->avatar property value)
+    . All attributes from zf-avatar
+*}
+{define "zf-avatar-user", ?\stdClass $entity = null, array $attributes = []}
+    {var string $srcPrefix = $attributes['src-prefix'] ?? "/assets/images/avatars/"}
+    {var ?string $avatar_image = null}
+    {if $entity}
+        {do $avatar_image = ($entity->avatar) ? $srcPrefix . $entity->avatar : null}
+        {if !$avatar_image}
+            {do $attributes['placeholder'] = ($entity->initials) ? $entity->initials : "N/A"}
+        {else}
+            {do $attributes['image'] = $avatar_image}
+        {/if}
+    {/if}
+    {include "zf-avatar", $attributes}
+{/define}
