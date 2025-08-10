@@ -1,0 +1,37 @@
+{*
+    Mixin used normally with a component which has the checked property.
+*}
+{define "zf-toggle", string $triggerElementId, bool $isInverted = false}
+    {var string $toggleElementId = uniqid("toggle-")}
+    <div id="{$toggleElementId}" class="{!$isInverted ? 'd-none' : 'd-block'}">
+        {block toggle-content}{/block}
+    </div>
+    <script nonce="{nonce()}">
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById({$triggerElementId}).addEventListener('change', function () {
+                let toggleElement = document.getElementById({$toggleElementId});
+                if (!{$isInverted}) {
+                    if (this.checked) {
+                        toggleElement.classList.remove("d-none");
+                    } else {
+                        toggleElement.classList.add("d-none");
+                    }
+                } else {
+                    if (this.checked) {
+                        toggleElement.classList.add("d-none");
+                    } else {
+                        toggleElement.classList.remove("d-none");
+                    }
+                }
+            });
+            if (document.getElementById({$triggerElementId}).checked) {
+                let toggleElement = document.getElementById({$toggleElementId});
+                if (!{$isInverted}) {
+                    toggleElement.classList.remove("d-none");
+                } else {
+                    toggleElement.classList.add("d-none");
+                }
+            }
+        });
+    </script>
+{/define}
