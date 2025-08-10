@@ -1,8 +1,8 @@
-<?php namespace Pulsar\Core\Latte;
+<?php namespace Pulsar\Latte;
 
 use Latte;
-use Pulsar\Core\Latte\Nodes\ToggleSectionNode;
-use Pulsar\Core\Latte\Nodes\ToggleUnavailableNode;
+use Pulsar\Latte\Nodes\ToggleSectionNode;
+use Pulsar\Latte\Nodes\ToggleUnavailableNode;
 use Zephyrus\Utilities\Formatter;
 
 /**

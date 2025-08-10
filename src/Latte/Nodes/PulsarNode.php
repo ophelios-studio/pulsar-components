@@ -1,4 +1,4 @@
-<?php namespace Pulsar\Core\Latte\Nodes;
+<?php namespace Pulsar\Latte\Nodes;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\StatementNode;

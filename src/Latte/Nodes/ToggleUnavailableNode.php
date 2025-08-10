@@ -1,9 +1,7 @@
-<?php namespace Pulsar\Core\Latte\Nodes;
+<?php namespace Pulsar\Latte\Nodes;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\Php\ArrayItemNode;
-use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\Scalar\BooleanNode;
 use Latte\Compiler\Nodes\Php\Scalar\StringNode;
 use Latte\Compiler\PrintContext;
