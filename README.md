@@ -46,3 +46,18 @@ a reference to the library as follows (update relative path if needed).
 ```latte
 {import ../pulsar/components/undraw.latte}
 ```
+
+### Latte node
+
+Make sure to override the `getRenderEngine` method of your Application class to load the extension.
+
+```php
+public function getRenderEngine(): RenderEngine
+{
+    $engine = parent::getRenderEngine();
+    if ($engine instanceof LatteEngine) {
+        $engine->addExtension(new PulsarLatteExtension());
+    }
+    return $engine;
+}
+```
