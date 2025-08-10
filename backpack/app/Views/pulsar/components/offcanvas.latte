@@ -1,0 +1,120 @@
+{*
+    ATTRIBUTES:
+    . static=false (if true, the offcanvas cannot be close by clicking outside)
+    . placement="end" (start|end|bottom|top)
+    . dynamic=false (if true, it will get the zf-fetch-url attribute of the caller and load its HTML. When used the block becomes optional and is used as a loading template)
+*}
+{define "zf-offcanvas", array $attributes = []}
+    {var bool $static = $attributes['static'] ?? false}
+    {var bool $dynamic = $attributes['dynamic'] ?? false}
+    {var string $identifier = $attributes['id'] ?? "offcanvas-read"}
+    {var string $placement = $attributes['placement'] ?? "end"}
+
+    {* Generate classes *}
+    {var string $class = "zf-offcanvas offcanvas offcanvas-" . $placement}
+
+    {* Generate attributes *}
+    {var array $canvasAttributes = []}
+    {if $static}
+        {do $canvasAttributes['data-bs-backdrop'] = 'static'}
+    {/if}
+
+    <div id="{$identifier}" class="{$class}" tabindex="-1" n:attr="$canvasAttributes">
+        <div class="offcanvas-body p-4">
+            {if $dynamic}
+                <script nonce="{nonce()}">
+                    document.addEventListener('DOMContentLoaded', function () {
+                        let offcanvasController = new AbortController();
+                        const el = document.getElementById({$identifier});
+                        let body = el.getElementsByClassName('zf-offcanvas-fetch-body')[0];
+                        let loading = el.getElementsByClassName('zf-offcanvas-fetch-loading')[0];
+
+                        el.addEventListener('show.bs.offcanvas', event => {
+                            if (offcanvasController) {
+                                offcanvasController.abort();
+                            }
+                            offcanvasController = new AbortController();
+                            const signal = offcanvasController.signal;
+                            let url = event.relatedTarget.getAttribute('zf-fetch-url');
+                            loading.classList.remove('d-none');
+                            body.classList.add('d-none');
+
+                            fetch(url, { signal })
+                                .then(response => {
+                                    // make sure the response is successful
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+
+                                    // use the text method on the Response object, since we're getting HTML
+                                    return response.text();
+                                })
+                                .then(html => {
+                                    const parser = new DOMParser();
+                                    const doc = parser.parseFromString(html, 'text/html');
+                                    body.innerHTML = doc.body.innerHTML;
+                                    body.classList.remove('d-none');
+                                    loading.classList.add('d-none');
+
+                                    // If there is JS in the resulting HTML it will not execute directly. We need to
+                                    // create new JS tags in the page for this to append. Removes it after execution.
+                                    const scripts = doc.getElementsByTagName('script');
+                                    for (let script of scripts) {
+                                        let newScript = document.createElement('script');
+
+                                        // Copy the script's content if it's inline Javascript
+                                        if (script.innerHTML) {
+                                            newScript.innerHTML = script.innerHTML;
+                                        }
+
+                                        // If script has a src attribute, copy it
+                                        // This handles case where script content is loaded from a URL
+                                        if (script.getAttribute('src')) {
+                                            newScript.src = script.getAttribute('src');
+                                        }
+
+                                        // If script has an async attribute, copy it
+                                        if (script.async) {
+                                            newScript.async = script.async;
+                                        }
+
+                                        newScript.setAttribute('nonce', {nonce()});
+                                        document.body.appendChild(newScript);
+                                        document.body.removeChild(newScript);
+
+                                        // Since we are dynamically loading the offcanvas, we need to call the initializeGoogleMaps
+                                        // function to ensure that any google maps in the offcanvas will be properly initialized.
+                                        if (typeof initializeGoogleMaps === 'function') {
+                                            setTimeout(initializeGoogleMaps, 0);
+                                        }
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error('There was a problem with the fetch operation: ', err);
+                                });
+                        });
+                    });
+                </script>
+                <div class="zf-offcanvas-fetch-loading">
+                    {block loading}
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading ...</span>
+                            </div>
+                        </div>
+                    {/block}
+                </div>
+                <div class="zf-offcanvas-fetch-body d-none"></div>
+            {else}
+                {block content}{/block}
+            {/if}
+        </div>
+    </div>
+{/define}
+
+{define "zf-offcanvas-title", string $label}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="m-0">{ellipsis($label, 20)|noescape}</h3>
+        <button class="btn-close" type="button" data-bs-dismiss="offcanvas"></button>
+    </div>
+{/define}
