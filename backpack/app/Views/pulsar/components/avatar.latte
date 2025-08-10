@@ -42,7 +42,7 @@
             {do $class .= " bg-" . $theme . " text-" . $theme . "-fg"}
         {/if}
     {/if}
-    {if }
+    {if $image}
         {do $style = "background-image: url('" . $image . "');"}
     {/if}
     <span class="{$class}" style="{$style|noescape}">
