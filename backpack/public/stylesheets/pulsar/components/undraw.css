@@ -1,0 +1,12 @@
+:root {
+    --zf-svg-accent: var(#4d8ed9);
+}
+
+.zf-undraw svg {
+    height: 100%;
+    width: 100%;
+}
+
+.zf-svg-accent {
+    fill: var(--zf-svg-accent);
+}
