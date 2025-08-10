@@ -61,17 +61,17 @@
 {/define}
 
 {define "zf-modal-info", string $identifier, array $attributes}
-    {var string $image = $attributes['image'] ?? localize("assets.confirmation")}
+    {var string $image = $attributes['illustration'] ?? "confirmation"}
     {var ?string $hintTheme = $attributes['hint-theme'] ?? 'warning'}
     {var ?string $text = $attributes['text'] ?? null}
     {var ?string $hint = $attributes['hint'] ?? null}
     {var ?string $hintIcon = $attributes['hint-icon'] ?? "patch-question"}
-    {var ?string $imageTheme = $attributes['image-theme'] ?? null}
+    {var ?string $imageTheme = $attributes['illustration-theme'] ?? "var(--tblr-primary)"}
     {var ?string $header = $attributes['header'] ?? null}
     {var ?string $innerLayout = $attributes['layout'] ?? null}
 
     {* Tag attributes *}
-    {var array $supportedAttributes = ['image', 'hint', 'hint-theme', 'text', 'image-theme', 'header', 'layout']}
+    {var array $supportedAttributes = ['illustration', 'hint', 'hint-theme', 'text', 'illustration-theme', 'header', 'layout']}
 
     {* Any custom attributes *}
     {var array $customAttributes = []}
@@ -85,6 +85,9 @@
         {block content}
         <div class="d-flex flex-column p-4 align-items-start justify-content-start">
             <div class="align-self-center text-center mb-2 mt-4">
+                <div class="mb-4">
+                    {include "zf-undraw", $image, [color: $imageTheme, height: "160px"]}
+                </div>
                 <div class="zf-undraw mb-4" style={!$imageTheme ? 'height: 160px;' : 'height: 160px; --zf-svg-accent: var(--bs-' . $imageTheme . ');'|noescape}>{embed($image)}</div>
                 <h4 n:ifcontent>{$header|noescape}</h4>
             </div>
@@ -106,82 +109,11 @@
     {var string $identifier = $attributes['id'] ?? 'modal-help'}
     {capture $innerLayout}
         <div class="text-center">
-            {include "zf-button", localize("buttons.close"), [theme: "light", data-bs-dismiss: "modal"]}
+            <a href="#" class="btn" data-bs-dismiss="modal">{localize("buttons.close")}</a>
         </div>
     {/capture}
-    {do $attributes['image'] = localize("assets.question")}
+    {do $attributes['illustration'] = "question"}
     {do $attributes['text'] = $text}
-    {do $attributes['layout'] = $innerLayout}
-    {include "zf-modal-info", $identifier, $attributes}
-{/define}
-
-{define "zf-modal-delete", array $attributes}
-    {var string $identifier = $attributes['id'] ?? 'modal-delete'}
-    {var string $protected = $attributes['protected'] ?? false}
-    {var string $hintIcon = $attributes['hint-icon'] ?? 'exclamation-triangle'}
-    {var ?string $layout = $attributes['layout'] ?? null}
-
-    {capture $innerLayout}
-        <form method="post" action="#" autocomplete="off">
-            <input type="hidden" name="__method" value="delete" />
-            {if $protected}
-                <hr class="dashed" />
-                {include "zf-field-password", localize("labels.password"), "security_confirmation", [required: true, help: localize("helps.password_confirmation")]}
-            {/if}
-            {if $layout}
-                {$layout}
-            {/if}
-            <div class="text-center mt-4">
-                {include "zf-button-submit", localize("buttons.delete"), [theme: "danger", icon: "trash3"]}
-            </div>
-        </form>
-    {/capture}
-
-    {do $attributes['image'] = localize("assets.trash")}
-    {do $attributes['image-theme'] = 'danger'}
-    {do $attributes['hint-icon'] = $hintIcon}
-    {do $attributes['layout'] = $innerLayout}
-    {include "zf-modal-info", $identifier, $attributes}
-{/define}
-
-{define "zf-modal-archive", array $attributes}
-    {var string $identifier = $attributes['id'] ?? 'modal-archive'}
-    {var bool $withComment = $attributes['with-comment'] ?? false}
-
-    {capture $innerLayout}
-        <form method="post" action="#" autocomplete="off">
-            <input type="hidden" name="__method" value="delete" />
-            {if $withComment}
-                <hr class="dashed" />
-                {include "zf-field-textarea", localize("labels.comment"), "comment"}
-                {include "zf-mention-authenticated"}
-            {/if}
-            <div class="text-center mt-4">
-                {include "zf-button-submit", localize("buttons.archive"), [theme: "danger", icon: "fa fa-box-archive"]}
-            </div>
-        </form>
-    {/capture}
-
-    {do $attributes['image'] = localize("assets.collecting")}
-    {do $attributes['image-theme'] = 'danger'}
-    {do $attributes['layout'] = $innerLayout}
-    {include "zf-modal-info", $identifier, $attributes}
-{/define}
-
-{define "zf-modal-restore", array $attributes}
-    {var string $identifier = $attributes['id'] ?? 'modal-restore'}
-    {var string $header = $attributes['header'] ?? localize("labels.restoration")}
-    {capture $innerLayout}
-        <form method="post" action="#" autocomplete="off">
-            <input type="hidden" name="__method" value="put" />
-            <div class="text-center mt-4">
-                {include "zf-button-submit", localize("buttons.restore"), [theme: "success", icon: "fa fa-undo-alt"]}
-            </div>
-        </form>
-    {/capture}
-    {do $attributes['image'] = localize("assets.collecting")}
-    {do $attributes['image-theme'] = 'success'}
-    {do $attributes['header'] = $header}
     {do $attributes['layout'] = $innerLayout}
     {include "zf-modal-info", $identifier, $attributes}
 {/define}

@@ -1,12 +1,12 @@
 {*
     ATTRIBUTES:
-    . height=200 (defines the height the undraw illustration should take in pixels)
+    . height="200px" (defines the height the undraw illustration should take in pixels)
     . color="var(--tblr-primary);" (color for the accent element of the illustration)
 *}
-{define "zf-undraw", $illustration, array $attributes = []}
-    {var int $height = $attributes['height'] ?? 200}
+{define "zf-undraw", string $illustration, array $attributes = []}
+    {var int $height = $attributes['height'] ?? "200px"}
     {var string $color = $attributes['color'] ?? "var(--tblr-primary);"}
-    <div class="zf-undraw" style="height: {$height}px; --zf-svg-accent: {$color|noescape};">
+    <div class="zf-undraw" style="height: {$height}; --zf-svg-accent: {$color|noescape};">
         {embed(localize("assets.$illustration"))}
     </div>
 {/define}
