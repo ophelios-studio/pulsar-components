@@ -30,3 +30,19 @@ files into the project with the standard Publisher class.
 ```shell
 composer update
 ```
+
+### Include CSS
+This library requires some CSS to work. In your project Latte, add a reference to the CSS library
+as follows.
+
+```latte
+<link rel="stylesheet" href="{asset('/stylesheets/pulsar/components/undraw.css')}">
+```
+
+### Include Latte component
+This library provides a Latte component to simplify its integration into HTML documents. To include, add
+a reference to the library as follows (update relative path if needed).
+
+```latte
+{import ../pulsar/components/undraw.latte}
+```
