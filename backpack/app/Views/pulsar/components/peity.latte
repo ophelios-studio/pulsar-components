@@ -1,0 +1,44 @@
+{*
+    BEHAVIORS:
+    . Works with . to add classes
+    . Able to receive custom attributes
+    . Cannot have a tooltip or anything specific because the Peity library created a dynamic SVG element which does not
+      inherit properties. The +zf-peity-* mixins should be within another HTML element which could have attributes.
+    . Can define peity properties with custom property data-peity. E.g:
+      data-peity='{ "fill": ["red", "#eeeeee"], "innerRadius": 40, "radius": 60 }'
+*}
+{define "zf-peity", string $graphType, string $graphValues, array $attributes = []}
+    <span class="peity-{$graphType}" n:attr="$attributes">{$graphValues|noescape}</span>
+{/define}
+
+{*
+    The pie value can be given as a proportion (e.g. 1/5 or 226/360 or 0.52/1.561) or it can be given as multiple
+    values delimited by comma (e.g. 1,4 or 226,134 or 0.52,1.041 or 1,2,3,2,2).
+*}
+{define "zf-peity-pie", string $value, array $attributes = []}
+    {include "zf-peity", 'pie', $value, $attributes}
+{/define}
+
+{*
+    The donut value can be given as a proportion (e.g. 1/5 or 226/360 or 0.52/1.561) or it can be given as multiple
+    values delimited by comma (e.g. 1,4 or 226,134 or 0.52,1.041 or 1,2,3,2,2).
+*}
+{define "zf-peity-donut", string $value, array $attributes = []}
+    {include "zf-peity", 'donut', $value, $attributes}
+{/define}
+
+{*
+    Line charts work on a comma-separated list of digits (e.g. 5,3,9,6,5,9,7,3,5,2 or 5,3,2,-1,-3,-2,2,3,5,2 or
+    0,-3,-6,-4,-5,-4,-7,-3,-5,-2).
+*}
+{define "zf-peity-line", string $value, array $attributes = []}
+    {include "zf-peity", 'line', $value, $attributes}
+{/define}
+
+{*
+    Bar charts work on a comma-separated list of digits (e.g. 5,3,9,6,5,9,7,3,5,2 or 5,3,2,-1,-3,-2,2,3,5,2 or
+    0,-3,-6,-4,-5,-4,-7,-3,-5,-2).
+*}
+{define "zf-peity-bar", string $value, array $attributes = []}
+    {include "zf-peity", 'bar', $value, $attributes}
+{/define}
