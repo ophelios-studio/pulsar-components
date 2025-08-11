@@ -1,0 +1,126 @@
+{*
+    ATTRIBUTES:
+    . theme=null (primary|secondary|success|danger|info|warning|dark|light|blue|azure|indigo|purple|pink|red|orange|yellow|lime|green|teal|cyan|facebook|twitter|x|linkedin|google|youtube|vimeo|dribble|github|instagram|pinterest|vk|rss|flickr|bitbucket)
+    . ghost=false (no background until hover)
+    . action=false (renders only the icon)
+    . outline=false (display only outline until hover)
+    . shape="standard" (standard|pill|square)
+    . icon=null (full icon name, e.g.; fa fa-bell or bi-)
+    . icon-position=start (start|end)
+    . icon-animation=null (rotate|shake|pulse|tada|icon-move-start|icon-move-end)
+    . size="md" (sm|md|lg|xl)
+    . label=null (button text)
+    . type="button" (button|submit|reset|anchor)
+    . href=null (link if anchor type)
+*}
+{define "zf-button", array $attributes = []}
+    {var ?string $icon = $attributes['icon'] ?? null}
+    {var ?string $iconAnimation = $attributes['icon-animation'] ?? null}
+    {var ?string $label = $attributes['label'] ?? null}
+    {var ?string $theme = $attributes['theme'] ?? null}
+    {var ?string $href = $attributes['href'] ?? null}
+    {var string $iconPosition = $attributes['icon-position'] ?? "start"}
+    {var string $size = $attributes['size'] ?? "md"}
+    {var string $shape = $attributes['shape'] ?? "standard"}
+    {var string $type = $attributes['type'] ?? "button"}
+    {var bool $ghost = $attributes['ghost'] ?? false}
+    {var bool $action = $attributes['action'] ?? false}
+    {var bool $outline = $attributes['outline'] ?? false}
+
+    {var string $buttonClass = "btn"}
+    {if $iconAnimation}
+        {do $buttonClass .= " btn-animate-icon btn-animate-icon-" . $iconAnimation}
+    {/if}
+    {if $size != "md"}
+        {do $buttonClass .= " btn-" . $size}
+    {/if}
+    {if $theme}
+        {do $buttonClass .= " btn-" . $theme}
+    {/if}
+    {if $ghost}
+        {do $buttonClass .= " btn-ghost"}
+    {/if}
+    {if $action}
+        {do $buttonClass .= " btn-action"}
+    {/if}
+    {if $outline}
+        {do $buttonClass .= " btn-outline"}
+    {/if}
+    {if $shape != "standard"}
+        {do $buttonClass .= " btn-" . $shape}
+    {/if}
+    {if $icon && !$label}
+        {do $buttonClass .= " btn-icon"}
+    {/if}
+
+    {* Any custom attributes *}
+    {var array $supportedAttributes = ['icon', 'icon-animation', 'label', 'theme', 'icon-position', 'size', 'shape', 'type', 'href', 'ghost', 'action', 'outline']}
+    {var array $customAttributes = []}
+    {foreach $attributes as $attributeName => $attributeValue}
+        {if !in_array($attributeName, $supportedAttributes)}
+            {do $customAttributes[$attributeName] = $attributeValue}
+        {/if}
+    {/foreach}
+
+    {capture $layout}
+        {if $icon}
+            {var $iconClass = str_contains($icon, ' ') ? $icon : "bi bi-" . $icon}
+            {if $iconPosition != "start"}
+                {do $iconClass .= " icon-end"}
+                <span n:if="$label">{$label|noescape}</span>
+            {/if}
+            <i class="icon {$iconClass}"></i>
+            {if $iconPosition == "start"}
+                <span n:if="$label">{$label|noescape}</span>
+            {/if}
+        {/if}
+        {if !$icon}
+            <span n:if="$label">{$label|noescape}</span>
+        {/if}
+    {/capture}
+
+    {if $type != "anchor"}
+        <button type="{$type}" class="{$buttonClass}" n:attr="$customAttributes">{$layout}</button>
+    {else}
+        <a href="{$href}" class="{$buttonClass}" n:attr="$customAttributes">{$layout}</a>
+    {/if}
+{/define}
+
+{define "zf-button-submit", ?string $label, array $attributes = []}
+    {do $attributes['label'] = $label}
+    {do $attributes['type'] = 'submit'}
+    {include "zf-button", $attributes}
+{/define}
+
+{define "zf-button-reset", ?string $label, array $attributes = []}
+    {do $attributes['label'] = $label}
+    {do $attributes['type'] = 'reset'}
+    {include "zf-button", $attributes}
+{/define}
+
+{define "zf-button-anchor", ?string $label, string $href, array $attributes = []}
+    {do $attributes['label'] = $label}
+    {do $attributes['href'] = $href}
+    {do $attributes['type'] = 'anchor'}
+    {include "zf-button", $attributes}
+{/define}
+
+{*
+    ATTRIBUTES:
+    . modal-text
+    . modal-submit
+*}
+{define "zf-button-modal", ?string $label, string $modalId, array $attributes = []}
+    {var ?string $modalText = $attributes['modal-text'] ?? null}
+    {var ?string $modalSubmit = $attributes['modal-submit'] ?? null}
+    {do $attributes['label'] = $label}
+    {do $attributes['data-bs-toggle'] = 'modal'}
+    {do $attributes['data-bs-target'] = '#' . $modalId}
+    {if $modalText}
+        {do $attributes['data-zf-modal-title'] = $modalText}
+    {/if}
+    {if $modalSubmit}
+        {do $attributes['data-zf-modal-submit'] = $modalSubmit}
+    {/if}
+    {include "zf-button", $attributes}
+{/define}
