@@ -5,24 +5,24 @@
 }
 
 .modal .modal-content {
-    color: var(--bs-body-color);
+    color: var(--tblr-body-bg);
     --bs-modal-border-radius: 1.5rem;
 }
 
-.modal .btn-light {
-    --bs-btn-color: var(--bs-light-text-emphasis);
-}
+/*.modal .btn-light {*/
+/*    --bs-btn-color: var(--tblr-light-text-emphasis);*/
+/*}*/
 
 .modal .modal-content > .container-fluid {
     min-height: 60px;
 }
 
 .modal .modal-dialog.zf-modal-dialog-right {
-    margin-right: var(--bs-modal-margin);
+    margin-right: var(--tblr-modal-margin);
 }
 
 .modal .modal-dialog.zf-modal-dialog-left {
-    margin-left: var(--bs-modal-margin);
+    margin-left: var(--tblr-modal-margin);
 }
 
 .zf-modal-error {
@@ -40,14 +40,15 @@
     font-size: 1.2rem;
     margin: 1rem;
     padding: 0.5rem;
+    color: #000;
 }
 
 .modal-content .btn-close:hover {
-    background-color: rgb(244 243 251);
+    /*background-color: rgb(244 243 251);*/
 }
 
 .zf-modal-dialog-light .btn-close {
-    filter: var(--bs-btn-close-white-filter);
+    /*filter: var(--bs-btn-close-white-filter);*/
 }
 
 /* region Modals */
@@ -75,7 +76,7 @@
 }
 
 .modal-content > div {
-    background-color: var(--bs-body-bg);
+    background-color: var(--tblr-body-bg);
     border-radius: 1rem;
     box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(66, 56, 95, 0.2) 0px 10px 15px -3px, rgba(66, 56, 95, 0.2) 0px 4px 6px -4px;
     border-bottom-color: rgb(231, 230, 244);
