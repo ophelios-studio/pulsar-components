@@ -66,7 +66,7 @@
     {var ?string $text = $attributes['text'] ?? null}
     {var ?string $hint = $attributes['hint'] ?? null}
     {var ?string $hintIcon = $attributes['hint-icon'] ?? "patch-question"}
-    {var ?string $imageTheme = $attributes['illustration-theme'] ?? "var(--tblr-primary)"}
+    {var ?string $imageTheme = $attributes['illustration-theme'] ?? "primary"}
     {var ?string $header = $attributes['header'] ?? null}
     {var ?string $innerLayout = $attributes['layout'] ?? null}
 
@@ -86,9 +86,8 @@
         <div class="d-flex flex-column p-4 align-items-start justify-content-start">
             <div class="align-self-center text-center mb-2 mt-4">
                 <div class="mb-4">
-                    {include "zf-undraw", $image, [color: $imageTheme, height: "160px"]}
+                    {include "zf-undraw", $image, [color: "var(--tblr-" . $imageTheme . ")", height: "160px"]}
                 </div>
-                <div class="zf-undraw mb-4" style={!$imageTheme ? 'height: 160px;' : 'height: 160px; --zf-svg-accent: var(--bs-' . $imageTheme . ');'|noescape}>{embed($image)}</div>
                 <h4 n:ifcontent>{$header|noescape}</h4>
             </div>
             <div class="zf-modal-error alert alert-danger"></div>

@@ -5,7 +5,6 @@
 }
 
 .modal .modal-content {
-    color: var(--tblr-body-bg);
     --bs-modal-border-radius: 1.5rem;
 }
 
