@@ -188,7 +188,7 @@ export default class Modal {
      */
     #defaultOnResponse(data, formElement) {
         if (data.status === "success") {
-            new bootstrap.Modal('#' + this.#modalId).hide();
+            this.#modalElement.dispatchEvent(new Event('hide.bs.modal'));
             setTimeout(() => {
                 if (!data.redirect) {
                     location.reload();
