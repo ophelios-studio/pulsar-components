@@ -1,0 +1,28 @@
+{*
+    ATTRIBUTES:
+    . theme="" (color)
+    . lite=false (subtle background)
+    . dot=true (display status dot)
+    . dot-animated=false
+*}
+{define "zf-status", string $label, array $attributes = []}
+    {var bool $withDot = $attributes['dot'] ?? true}
+    {var bool $dotAnimated = $attributes['dot-animated'] ?? false}
+    {var bool $lite = $attributes['lite'] ?? false}
+    {var string $theme = $attributes['theme'] ?? "blue"}
+
+    {* Generate class *}
+    {var string $statusClass = "status status-" . $theme}
+    {if $lite}
+        {do $statusClass .= " status-lite"}
+    {/if}
+
+    <span class="{$statusClass}">
+        {var string $dotClass = "status-dot"}
+        {if $dotAnimated}
+            {do $dotClass .= " status-dot-animate"}
+        {/if}
+        <span n:if="$withDot" class="{$dotClass}"></span>
+        {$label|noescape}
+    </span>
+{/define}
