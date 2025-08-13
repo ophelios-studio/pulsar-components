@@ -97,13 +97,13 @@
 }
 
 .modal-backdrop {
-    --bs-backdrop-bg: rgba(25, 16, 52, 0.5);
+    --tblr-backdrop-bg: rgba(25, 16, 52, 0.5);
     -webkit-backdrop-filter: blur(4px);
     -webkit-font-smoothing: antialiased;
     backdrop-filter: blur(4px);
 }
 
-body.modal-open #zf-page-wrapper {
+body.modal-open .page {
     -webkit-filter: blur(4px);
     -moz-filter: blur(4px);
     -o-filter: blur(4px);
