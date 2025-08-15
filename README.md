@@ -61,3 +61,11 @@ public function getRenderEngine(): RenderEngine
     return $engine;
 }
 ```
+
+### Include Confetti
+This library uses the [js-confetti](https://github.com/sarcadass/js-confetti) library to create confetti 
+effects. To include, add a reference to the library as follows.
+
+```html
+<script src="/javascripts/pulsar/vendor/js-confetti/confetti.min.js"></script>
+```
