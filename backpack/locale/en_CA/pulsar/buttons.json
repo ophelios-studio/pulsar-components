@@ -20,6 +20,8 @@
     "delete": "Delete",
     "archive": "Archive",
     "restore": "Restore",
+    "disable": "Disable",
+    "enable": "Enable",
     "execute": "Execute",
     "export": "Export",
     "activate": "Activate",
